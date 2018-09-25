@@ -29,7 +29,7 @@
 %   of nodes on this cell.
 %   Each index will be assigned in the same order as the deal.II
 %   library enumerates its degrees of freedom.
-%   (see: doi:10.1145/1486525.1486529, Fig. 3)
+%   (see: https://www.dealii.org/9.0.0/doxygen/deal.II/classFE__Q.html)
 %
 \newcommand{\LagrangeCell}[6]{
 	% -------------------
@@ -100,10 +100,10 @@
 		% ------------
 		% volume nodes
 		% ------------
-		\foreach \y in {1, ..., \ordermo}
-			\foreach \x in {1, ..., \ordermo}
+		\foreach \x in {1, ..., \ordermo}
+			\foreach \y in {1, ..., \ordermo}
 				\draw (\X + \x*\L/\order, \Y + \y*\L/\order) circle (\r)
 					node[anchor=north]
-						{\pgfmathparse{\nodes[3 + (3+\x)*\ordermo + \y]}\pgfmathresult};
+						{\pgfmathparse{\nodes[3 + (3+\y)*\ordermo + \x]}\pgfmathresult};
 	\fi
 }
