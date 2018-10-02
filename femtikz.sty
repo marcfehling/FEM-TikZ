@@ -32,78 +32,78 @@
 %   (see: https://www.dealii.org/9.0.0/doxygen/deal.II/classFE__Q.html)
 %
 \newcommand{\LagrangeCell}[6]{
-	% -------------------
-	% auxillary variables
-	% -------------------
-	\def\X{#1}
-	\def\Y{#2}
-	\def\L{#3}
-	\def\r{#4}
-	\def\order{#5}
-	\def\nodes{#6}
+  % -------------------
+  % auxillary variables
+  % -------------------
+  \def\X{#1}
+  \def\Y{#2}
+  \def\L{#3}
+  \def\r{#4}
+  \def\order{#5}
+  \def\nodes{#6}
 
-	\pgfmathsetmacro\ordermo{\order - 1}
+  \pgfmathsetmacro\ordermo{\order - 1}
 
-	% ---------
-	% cell body
-	% ---------
-	\draw (\X,\Y) rectangle (\X+\L,\Y+\L);
+  % ---------
+  % cell body
+  % ---------
+  \draw (\X,\Y) rectangle (\X+\L,\Y+\L);
 
-	% ------------
-	% vertex nodes
-	% ------------
-	\foreach \x in {0,1}
-		\foreach \y in {0,1}
-			\fill (\X + \x*\L, \Y + \y*\L) circle (\r);
-	% place indices individually
-	\node[anchor=south west] at (\X   ,\Y   )
-		{\pgfmathparse{\nodes[0]}\pgfmathresult};
-	\node[anchor=south east] at (\X+\L,\Y   )
-		{\pgfmathparse{\nodes[1]}\pgfmathresult};
-	\node[anchor=north west] at (\X   ,\Y+\L)
-		{\pgfmathparse{\nodes[2]}\pgfmathresult};
-	\node[anchor=north east] at (\X+\L,\Y+\L)
-		{\pgfmathparse{\nodes[3]}\pgfmathresult};
+  % ------------
+  % vertex nodes
+  % ------------
+  \foreach \x in {0,1}
+    \foreach \y in {0,1}
+      \fill (\X + \x*\L, \Y + \y*\L) circle (\r);
+  % place indices individually
+  \node[anchor=south west] at (\X   ,\Y   )
+    {\pgfmathparse{\nodes[0]}\pgfmathresult};
+  \node[anchor=south east] at (\X+\L,\Y   )
+    {\pgfmathparse{\nodes[1]}\pgfmathresult};
+  \node[anchor=north west] at (\X   ,\Y+\L)
+    {\pgfmathparse{\nodes[2]}\pgfmathresult};
+  \node[anchor=north east] at (\X+\L,\Y+\L)
+    {\pgfmathparse{\nodes[3]}\pgfmathresult};
 
-	\ifnum \order>1
-		% ----------
-		% face nodes
-		% ----------
-		\begin{scope}
-			\clip (\X,\Y) rectangle (\X+\L,\Y+\L);
+  \ifnum \order>1
+    % ----------
+    % face nodes
+    % ----------
+    \begin{scope}
+      \clip (\X,\Y) rectangle (\X+\L,\Y+\L);
 
-			% west
-			\foreach \y in {1, ..., \ordermo}
-				\draw (\X    - \r, \Y + \y*\L/\order - \r) rectangle (\X    + \r, \Y + \y*\L/\order + \r)
-					node[pos=0.5, anchor=west]
-						{\pgfmathparse{\nodes[3 + 0*\ordermo + \y]}\pgfmathresult};
+      % west
+      \foreach \y in {1, ..., \ordermo}
+        \draw (\X    - \r, \Y + \y*\L/\order - \r) rectangle (\X    + \r, \Y + \y*\L/\order + \r)
+          node[pos=0.5, anchor=west]
+            {\pgfmathparse{\nodes[3 + 0*\ordermo + \y]}\pgfmathresult};
 
-			% east
-			\foreach \y in {1, ..., \ordermo}
-				\draw (\X+\L - \r, \Y + \y*\L/\order - \r) rectangle (\X+\L + \r, \Y + \y*\L/\order + \r)
-					node[pos=0.5, anchor=east]
-						{\pgfmathparse{\nodes[3 + 1*\ordermo + \y]}\pgfmathresult};
+      % east
+      \foreach \y in {1, ..., \ordermo}
+        \draw (\X+\L - \r, \Y + \y*\L/\order - \r) rectangle (\X+\L + \r, \Y + \y*\L/\order + \r)
+          node[pos=0.5, anchor=east]
+            {\pgfmathparse{\nodes[3 + 1*\ordermo + \y]}\pgfmathresult};
 
-			% south
-			\foreach \x in {1, ..., \ordermo}
-				\draw (\X + \x*\L/\order - \r, \Y    - \r) rectangle (\X + \x*\L/\order + \r, \Y    + \r)
-					node[pos=0.5, anchor=south]
-						{\pgfmathparse{\nodes[3 + 2*\ordermo + \x]}\pgfmathresult};
+      % south
+      \foreach \x in {1, ..., \ordermo}
+        \draw (\X + \x*\L/\order - \r, \Y    - \r) rectangle (\X + \x*\L/\order + \r, \Y    + \r)
+          node[pos=0.5, anchor=south]
+            {\pgfmathparse{\nodes[3 + 2*\ordermo + \x]}\pgfmathresult};
 
-			% north
-			\foreach \x in {1, ..., \ordermo}
-				\draw (\X + \x*\L/\order - \r, \Y+\L - \r) rectangle (\X + \x*\L/\order + \r, \Y+\L + \r)
-					node[pos=0.5, anchor=north]
-						{\pgfmathparse{\nodes[3 + 3*\ordermo + \x]}\pgfmathresult};
-		\end{scope}
+      % north
+      \foreach \x in {1, ..., \ordermo}
+        \draw (\X + \x*\L/\order - \r, \Y+\L - \r) rectangle (\X + \x*\L/\order + \r, \Y+\L + \r)
+          node[pos=0.5, anchor=north]
+            {\pgfmathparse{\nodes[3 + 3*\ordermo + \x]}\pgfmathresult};
+    \end{scope}
 
-		% ------------
-		% volume nodes
-		% ------------
-		\foreach \x in {1, ..., \ordermo}
-			\foreach \y in {1, ..., \ordermo}
-				\draw (\X + \x*\L/\order, \Y + \y*\L/\order) circle (\r)
-					node[anchor=north]
-						{\pgfmathparse{\nodes[3 + (3+\y)*\ordermo + \x]}\pgfmathresult};
-	\fi
+    % ------------
+    % volume nodes
+    % ------------
+    \foreach \x in {1, ..., \ordermo}
+      \foreach \y in {1, ..., \ordermo}
+        \draw (\X + \x*\L/\order, \Y + \y*\L/\order) circle (\r)
+          node[anchor=north]
+            {\pgfmathparse{\nodes[3 + (3+\y)*\ordermo + \x]}\pgfmathresult};
+  \fi
 }
