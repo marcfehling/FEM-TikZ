@@ -23,15 +23,16 @@
 %   Size/Radius of each node.
 % #5 : int
 %   Order of the Lagrange element associated with this cell.
-% #6 : array(string)
+% #6 : array(string) or {}
 %   List of indices for each node on the cell.
 %   This array must be at least of a size that matches the number
 %   of nodes on this cell.
 %   Each index will be assigned in the same order as the deal.II
 %   library enumerates its degrees of freedom.
 %   (see: https://www.dealii.org/9.0.0/doxygen/deal.II/classFE__Q.html)
+%   If the argument is left empty, then no indices will be printed. 
 %
-\newcommand{\LagrangeCell}[6]{{
+\newcommand*{\LagrangeCell}[6]{{
   % -------------------
   % auxillary variables
   % -------------------
@@ -43,6 +44,10 @@
   \def\nodes{#6}
 
   \pgfmathsetmacro\ordermo{\order - 1}
+
+  \newcommand*{\parsenode}[1]{
+    \ifx\nodes\empty\else{\pgfmathparse{\nodes[##1]}\pgfmathresult}\fi
+  }
 
   % ---------
   % cell body
@@ -56,14 +61,10 @@
     \foreach \y in {0,1}
       \fill (\X + \x*\L, \Y + \y*\L) circle (\r);
   % place indices individually
-  \node[anchor=south west] at (\X   ,\Y   )
-    {\pgfmathparse{\nodes[0]}\pgfmathresult};
-  \node[anchor=south east] at (\X+\L,\Y   )
-    {\pgfmathparse{\nodes[1]}\pgfmathresult};
-  \node[anchor=north west] at (\X   ,\Y+\L)
-    {\pgfmathparse{\nodes[2]}\pgfmathresult};
-  \node[anchor=north east] at (\X+\L,\Y+\L)
-    {\pgfmathparse{\nodes[3]}\pgfmathresult};
+  \node[anchor=south west] at (\X   ,\Y   ) {\parsenode{0}};
+  \node[anchor=south east] at (\X+\L,\Y   ) {\parsenode{1}};
+  \node[anchor=north west] at (\X   ,\Y+\L) {\parsenode{2}};
+  \node[anchor=north east] at (\X+\L,\Y+\L) {\parsenode{3}};
 
   \ifnum \order>1
     % ----------
@@ -75,26 +76,22 @@
       % west
       \foreach \y in {1, ..., \ordermo}
         \draw (\X    - \r, \Y + \y*\L/\order - \r) rectangle (\X    + \r, \Y + \y*\L/\order + \r)
-          node[pos=0.5, anchor=west]
-            {\pgfmathparse{\nodes[3 + 0*\ordermo + \y]}\pgfmathresult};
+          node[pos=0.5, anchor=west] {\parsenode{3 + 0*\ordermo + \y}};
 
       % east
       \foreach \y in {1, ..., \ordermo}
         \draw (\X+\L - \r, \Y + \y*\L/\order - \r) rectangle (\X+\L + \r, \Y + \y*\L/\order + \r)
-          node[pos=0.5, anchor=east]
-            {\pgfmathparse{\nodes[3 + 1*\ordermo + \y]}\pgfmathresult};
+          node[pos=0.5, anchor=east] {\parsenode{3 + 1*\ordermo + \y}};
 
       % south
       \foreach \x in {1, ..., \ordermo}
         \draw (\X + \x*\L/\order - \r, \Y    - \r) rectangle (\X + \x*\L/\order + \r, \Y    + \r)
-          node[pos=0.5, anchor=south]
-            {\pgfmathparse{\nodes[3 + 2*\ordermo + \x]}\pgfmathresult};
+          node[pos=0.5, anchor=south] {\parsenode{3 + 2*\ordermo + \x}};
 
       % north
       \foreach \x in {1, ..., \ordermo}
         \draw (\X + \x*\L/\order - \r, \Y+\L - \r) rectangle (\X + \x*\L/\order + \r, \Y+\L + \r)
-          node[pos=0.5, anchor=north]
-            {\pgfmathparse{\nodes[3 + 3*\ordermo + \x]}\pgfmathresult};
+          node[pos=0.5, anchor=north] {\parsenode{3 + 3*\ordermo + \x}};
     \end{scope}
 
     % ------------
@@ -103,7 +100,6 @@
     \foreach \x in {1, ..., \ordermo}
       \foreach \y in {1, ..., \ordermo}
         \draw (\X + \x*\L/\order, \Y + \y*\L/\order) circle (\r)
-          node[anchor=north]
-            {\pgfmathparse{\nodes[3 + (3+\y)*\ordermo + \x]}\pgfmathresult};
+          node[anchor=north] {\parsenode{3 + (3+\y)*\ordermo + \x}};
   \fi
 }}
